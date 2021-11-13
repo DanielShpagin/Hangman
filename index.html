@@ -3,13 +3,46 @@
 <head>
     <title>"Шибениця!"</title>
 </head>
+<style>
+    #restart{
+        position: absolute;
+        top: 70pt;
+        left: 20pt;  
+        display: none;      
+    }
+    .myButton {
+        box-shadow:inset 0px 1px 0px 0px #ffffff;
+        background:linear-gradient(to bottom, #ededed 5%, #dfdfdf 100%);
+        background-color:#ededed;
+        border-radius:6px;
+        border:1px solid #dcdcdc;
+        display:inline-block;
+        cursor:pointer;
+        color:#777777;
+        font-family:Arial;
+        font-size:15px;
+        font-weight:bold;
+        padding:6px 24px;
+        text-decoration:none;
+        text-shadow:0px 1px 0px #ffffff;
+    }
+    .myButton:hover {
+        background:linear-gradient(to bottom, #dfdfdf 5%, #ededed 100%);
+        background-color:#dfdfdf;
+    }
+    .myButton:active {
+        position:relative;
+        top:1px;
+    }
+</style>
 
 <body>
+    <a id="restart" class="myButton">RESTART</a>
+
     <canvas id="canvas" width="400" height="200"></canvas>
 
     <script src='https://code.jquery.com/jquery-2.1.0.js'></script>
 <script>
-    
     var canvas = document.getElementById('canvas');
     var ctx = canvas.getContext("2d");
     ctx.lineWidth = 3;
@@ -59,6 +92,9 @@
             ctx.textAlign = "left";
             ctx.textBaseline = "top";
             ctx.fillText("GAME OVER", 20, 60);
+            $('#restart').show().click(function (event) {
+                initeAll()
+            });
         }
     };
 
@@ -84,7 +120,34 @@
         return words[Math.floor(Math.random() * words.length)];
     };
 
-    function drawAnswerArray (word) {
+    function initeAll() {
+        $("#restart").hide();
+        ctx.clearRect(0, 0, width, height);
+        var words = [
+            "turtle", 
+            "ghost", 
+            "winter", 
+            "summer", 
+            "spring", 
+            "autumn", 
+            "javascript", 
+            "argentina", 
+            "mother", 
+            "weather", 
+            "father", 
+            "family", 
+            "australia", 
+            "america", 
+            "animals", 
+            "amogus"
+        ];
+        errors = 0;
+        word = words[Math.floor(Math.random() * words.length)];
+        res = [];
+        drawAnswerArray(word);
+    };
+
+    function drawAnswerArray(word) {
         for (var i = 0; i < word.length; i++) {
             ctx.beginPath();
             ctx.moveTo(i*20, 150);
@@ -102,40 +165,42 @@
     for (var u = 0; word.length > u; u++) {
         res.push('_');
     };
-    
-    console.log(word);
 
     $('body').keydown(function (event) {
-        ctx.font = "20px Comic Sans MS";
-        ctx.fillStyle = "Black";
-        ctx.textAlign = "left";
-        ctx.textBaseline = "top";
-        someThing = false;
-        if (event.keyCode >= 65 && event.keyCode <= 90) {
-            for (var f = 0; word.length > f; f++) {
-                if (word[f] === event.key) {
-                    ctx.fillText(`${event.key.toUpperCase()}`, f*20, 130);
-                    someThing = true;
-                    res[f] = `${event.key}`;
-                    console.log(res.join(' '));
-                }
-            }  
-        }
-        if (event.keyCode >= 65 && event.keyCode <= 90) {
-            if (someThing === false) {
-                errors++;
-                drawHangman();
-            }
-        }
-        if (res.join('') === word) {
-            ctx.clearRect(0, 0, width, height);
+        if (errors !== 7) {
             ctx.font = "20px Comic Sans MS";
             ctx.fillStyle = "Black";
             ctx.textAlign = "left";
             ctx.textBaseline = "top";
-            ctx.fillText("YOU WIN!", 20, 60);
+            someThing = false;
+            if (event.keyCode >= 65 && event.keyCode <= 90) {
+                for (var f = 0; word.length > f; f++) {
+                    if (word[f] === event.key) {
+                        ctx.fillText(`${event.key.toUpperCase()}`, f*20, 130);
+                        someThing = true;
+                        res[f] = `${event.key}`;
+                    }
+                }
+            }
+            if (event.keyCode >= 65 && event.keyCode <= 90) {
+                if (someThing === false) {
+                    errors++;
+                    drawHangman();
+                }
+            }
+            if (res.join('') === word) {
+                ctx.clearRect(0, 0, width, height);
+                ctx.font = "15px Comic Sans MS";
+                ctx.fillStyle = "Black";
+                ctx.textAlign = "left";
+                ctx.textBaseline = "top";
+                ctx.fillText(`YOU WIN! THE WORD WAS: ${word.toUpperCase()}`, 20, 60);
+                ctx.font = "15px Comic Sans Ms";
+                $('#restart').show().click(function (event) {
+                    initeAll();
+                });
+            }
         }
-        
     });
     
 </script>
