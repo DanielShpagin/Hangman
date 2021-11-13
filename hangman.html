@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>"Шибениця!"</title>
+</head>
+
+<body>
+    <canvas id="canvas" width="400" height="200"></canvas>
+
+    <script src='https://code.jquery.com/jquery-2.1.0.js'></script>
+<script>
+    
+    var canvas = document.getElementById('canvas');
+    var ctx = canvas.getContext("2d");
+    ctx.lineWidth = 3;
+
+    var width = canvas.width;
+    var height = canvas.height;
+    var errors = 0;
+
+    function drawHangman () {
+        if (errors === 1) {
+            ctx.beginPath();
+            ctx.moveTo(40, 20);
+            ctx.lineTo(60, 20);
+            ctx.lineTo(60, 40);
+            ctx.lineTo(40, 40);
+            ctx.lineTo(40, 20);
+            ctx.stroke();
+        } else if (errors === 2) {
+            ctx.beginPath();
+            ctx.moveTo(50, 40);
+            ctx.lineTo(50, 80);
+            ctx.stroke();
+        } else if (errors === 3) {
+            ctx.beginPath();
+            ctx.moveTo(50, 80);
+            ctx.lineTo(30, 120);
+            ctx.stroke();
+        } else if (errors === 4) {
+            ctx.beginPath();
+            ctx.moveTo(50, 80);
+            ctx.lineTo(70, 120);
+            ctx.stroke();
+        } else if (errors === 5) {
+            ctx.beginPath();
+            ctx.moveTo(50, 50);
+            ctx.lineTo(20, 40);
+            ctx.stroke();
+        } else if (errors === 6) {
+            ctx.beginPath();
+            ctx.moveTo(50, 50);
+            ctx.lineTo(80, 40);
+            ctx.stroke();
+        } else if (errors === 7) {
+            ctx.clearRect(0, 0, width, height);
+            ctx.font = "20px Comic Sans MS";
+            ctx.fillStyle = "Black";
+            ctx.textAlign = "left";
+            ctx.textBaseline = "top";
+            ctx.fillText("GAME OVER", 20, 60);
+        }
+    };
+
+    function pickWord () {
+        var words = [
+            "turtle", 
+            "ghost", 
+            "winter", 
+            "summer", 
+            "spring", 
+            "autumn", 
+            "javascript", 
+            "argentina", 
+            "mother", 
+            "weather", 
+            "father", 
+            "family", 
+            "australia", 
+            "america", 
+            "animals", 
+            "amogus"
+        ];
+        return words[Math.floor(Math.random() * words.length)];
+    };
+
+    function drawAnswerArray (word) {
+        for (var i = 0; i < word.length; i++) {
+            ctx.beginPath();
+            ctx.moveTo(i*20, 150);
+            ctx.lineTo(i*20 + 15, 150);
+            ctx.stroke();
+        }
+    };
+
+
+    var word = pickWord();
+    var answerArray = drawAnswerArray(word);
+    var someThing = false;
+    var res = [];
+
+    for (var u = 0; word.length > u; u++) {
+        res.push('_');
+    };
+    
+    console.log(word);
+
+    $('body').keydown(function (event) {
+        ctx.font = "20px Comic Sans MS";
+        ctx.fillStyle = "Black";
+        ctx.textAlign = "left";
+        ctx.textBaseline = "top";
+        someThing = false;
+        if (event.keyCode >= 65 && event.keyCode <= 90) {
+            for (var f = 0; word.length > f; f++) {
+                if (word[f] === event.key) {
+                    ctx.fillText(`${event.key.toUpperCase()}`, f*20, 130);
+                    someThing = true;
+                    res[f] = `${event.key}`;
+                    console.log(res.join(' '));
+                }
+            }  
+        }
+        if (event.keyCode >= 65 && event.keyCode <= 90) {
+            if (someThing === false) {
+                errors++;
+                drawHangman();
+            }
+        }
+        if (res.join('') === word) {
+            ctx.clearRect(0, 0, width, height);
+            ctx.font = "20px Comic Sans MS";
+            ctx.fillStyle = "Black";
+            ctx.textAlign = "left";
+            ctx.textBaseline = "top";
+            ctx.fillText("YOU WIN!", 20, 60);
+        }
+        
+    });
+    
+</script>
+</body>
+</html>
