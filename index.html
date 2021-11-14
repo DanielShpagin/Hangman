@@ -10,6 +10,11 @@
         left: 20pt;  
         display: none;      
     }
+    #regulations{
+        position: absolute;
+        top: 5pt;
+        left: 10pt;
+    }
     .myButton {
         box-shadow:inset 0px 1px 0px 0px #ffffff;
         background:linear-gradient(to bottom, #ededed 5%, #dfdfdf 100%);
@@ -38,6 +43,7 @@
 
 <body>
     <a id="restart" class="myButton">RESTART</a>
+    <a id="regulations" class="myButton">REGULATIONS</a>
 
     <canvas id="canvas" width="400" height="200"></canvas>
 
@@ -52,49 +58,8 @@
     var errors = 0;
 
     function drawHangman () {
-        if (errors === 1) {
-            ctx.beginPath();
-            ctx.moveTo(40, 20);
-            ctx.lineTo(60, 20);
-            ctx.lineTo(60, 40);
-            ctx.lineTo(40, 40);
-            ctx.lineTo(40, 20);
-            ctx.stroke();
-        } else if (errors === 2) {
-            ctx.beginPath();
-            ctx.moveTo(50, 40);
-            ctx.lineTo(50, 80);
-            ctx.stroke();
-        } else if (errors === 3) {
-            ctx.beginPath();
-            ctx.moveTo(50, 80);
-            ctx.lineTo(30, 120);
-            ctx.stroke();
-        } else if (errors === 4) {
-            ctx.beginPath();
-            ctx.moveTo(50, 80);
-            ctx.lineTo(70, 120);
-            ctx.stroke();
-        } else if (errors === 5) {
-            ctx.beginPath();
-            ctx.moveTo(50, 50);
-            ctx.lineTo(20, 40);
-            ctx.stroke();
-        } else if (errors === 6) {
-            ctx.beginPath();
-            ctx.moveTo(50, 50);
-            ctx.lineTo(80, 40);
-            ctx.stroke();
-        } else if (errors === 7) {
-            ctx.clearRect(0, 0, width, height);
-            ctx.font = "20px Comic Sans MS";
-            ctx.fillStyle = "Black";
-            ctx.textAlign = "left";
-            ctx.textBaseline = "top";
-            ctx.fillText("GAME OVER", 20, 60);
-            $('#restart').show().click(function (event) {
-                initeAll()
-            });
+        for (var q = 0; 7 > q; q++) {
+            
         }
     };
 
@@ -150,8 +115,8 @@
     function drawAnswerArray(word) {
         for (var i = 0; i < word.length; i++) {
             ctx.beginPath();
-            ctx.moveTo(i*20, 150);
-            ctx.lineTo(i*20 + 15, 150);
+            ctx.moveTo(i*20, 170);
+            ctx.lineTo(i*20 + 15, 170);
             ctx.stroke();
         }
     };
@@ -167,7 +132,7 @@
     };
 
     $('body').keydown(function (event) {
-        if (errors !== 7) {
+        if (errors !== 9) {
             ctx.font = "20px Comic Sans MS";
             ctx.fillStyle = "Black";
             ctx.textAlign = "left";
