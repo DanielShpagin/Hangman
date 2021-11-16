@@ -4,16 +4,22 @@
     <title>"Шибениця!"</title>
 </head>
 <style>
-    #restart{
+    .container{
+        max-width: 700px;
+        margin: auto;
+        align-items: center;
+        text-align: center;
+    }
+    #restart {
         position: absolute;
         top: 70pt;
         left: 20pt;  
         display: none;      
     }
-    #regulations{
-        position: absolute;
-        top: 5pt;
-        left: 10pt;
+    #canvas {
+        padding: 0;
+        margin: auto;
+        display: block;
     }
     .myButton {
         box-shadow:inset 0px 1px 0px 0px #ffffff;
@@ -42,24 +48,43 @@
 </style>
 
 <body>
-    <a id="restart" class="myButton">RESTART</a>
-    <a id="regulations" class="myButton">REGULATIONS</a>
-
-    <canvas id="canvas" width="400" height="200"></canvas>
-
+    <div class="container">
+        <a id="restart" class="myButton">RESTART</a><br>
+        <img id="regulaitons">
+        <img id="myPicture" src="https://danielshpagin.github.io/Hangman/img/1.png">
+        <canvas id="canvas" width="1000" height="200"></canvas>
+    </div>
+    
     <script src='https://code.jquery.com/jquery-2.1.0.js'></script>
 <script>
     var canvas = document.getElementById('canvas');
     var ctx = canvas.getContext("2d");
-    ctx.lineWidth = 3;
+    
 
     var width = canvas.width;
     var height = canvas.height;
     var errors = 0;
 
     function drawHangman () {
-        for (var q = 0; 7 > q; q++) {
-            
+        if (errors !== 7) {
+            for (var q = 1; 8 > q; q++) {
+                if (errors === q) {
+                    $('#myPicture').show().attr('src','https://danielshpagin.github.io/Hangman/img/'+ (q+1) +'.png');
+                }
+            }
+        }
+        if (errors === 7) {
+            $('#myPicture').hide();
+            ctx.clearRect(0, 0, width, height);
+            ctx.font = "15px Comic Sans MS";
+            ctx.fillStyle = "Black";
+            ctx.textAlign = "left";
+            ctx.textBaseline = "top";
+            ctx.fillText("GAME OVER", 20, 60);
+            ctx.font = "50px Comic Sans Ms";
+            $('#restart').show().click(function (event) {
+                initeAll();
+            });
         }
     };
 
@@ -83,65 +108,59 @@
             "amogus"
         ];
         return words[Math.floor(Math.random() * words.length)];
+        canvas.width = word.length*60;
     };
 
     function initeAll() {
         $("#restart").hide();
-        ctx.clearRect(0, 0, width, height);
-        var words = [
-            "turtle", 
-            "ghost", 
-            "winter", 
-            "summer", 
-            "spring", 
-            "autumn", 
-            "javascript", 
-            "argentina", 
-            "mother", 
-            "weather", 
-            "father", 
-            "family", 
-            "australia", 
-            "america", 
-            "animals", 
-            "amogus"
-        ];
+        word = pickWord();
+        ctx.clearRect(0, 0, canvas.width, canvas.height);        
         errors = 0;
-        word = words[Math.floor(Math.random() * words.length)];
+        
         res = [];
         drawAnswerArray(word);
+        $('#myPicture').show().attr('src','https://danielshpagin.github.io/Hangman/img/1.png');
+        console.log(word);
     };
 
-    function drawAnswerArray(word) {
+    
+
+    function drawAnswerArray(word) {     
+        canvas.width = word.length*60;   
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = "Black";
         for (var i = 0; i < word.length; i++) {
             ctx.beginPath();
-            ctx.moveTo(i*20, 170);
-            ctx.lineTo(i*20 + 15, 170);
+            ctx.moveTo(i*60, 170);
+            ctx.lineTo(i*60 + 50, 170);
             ctx.stroke();
         }
     };
-
-
-    var word = pickWord();
-    var answerArray = drawAnswerArray(word);
-    var someThing = false;
+    
+    
+    var word;
+    var answerArray;
     var res = [];
+
+    initeAll();
 
     for (var u = 0; word.length > u; u++) {
         res.push('_');
     };
 
+    console.log(word)
+
     $('body').keydown(function (event) {
         if (errors !== 9) {
-            ctx.font = "20px Comic Sans MS";
+            ctx.font = "50px Comic Sans MS";
             ctx.fillStyle = "Black";
             ctx.textAlign = "left";
             ctx.textBaseline = "top";
-            someThing = false;
+            var someThing = false;
             if (event.keyCode >= 65 && event.keyCode <= 90) {
                 for (var f = 0; word.length > f; f++) {
                     if (word[f] === event.key) {
-                        ctx.fillText(`${event.key.toUpperCase()}`, f*20, 130);
+                        ctx.fillText(`${event.key.toUpperCase()}`, f*60, 130);
                         someThing = true;
                         res[f] = `${event.key}`;
                     }
