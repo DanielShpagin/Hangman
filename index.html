@@ -3,59 +3,21 @@
 <head>
     <title>"Шибениця!"</title>
 </head>
-<style>
-    .container{
-        max-width: 700px;
-        margin: auto;
-        align-items: center;
-        text-align: center;
-    }
-    #restart {
-        position: absolute;
-        top: 70pt;
-        left: 20pt;  
-        display: none;      
-    }
-    #canvas {
-        padding: 0;
-        margin: auto;
-        display: block;
-    }
-    .myButton {
-        box-shadow:inset 0px 1px 0px 0px #ffffff;
-        background:linear-gradient(to bottom, #ededed 5%, #dfdfdf 100%);
-        background-color:#ededed;
-        border-radius:6px;
-        border:1px solid #dcdcdc;
-        display:inline-block;
-        cursor:pointer;
-        color:#777777;
-        font-family:Arial;
-        font-size:15px;
-        font-weight:bold;
-        padding:6px 24px;
-        text-decoration:none;
-        text-shadow:0px 1px 0px #ffffff;
-    }
-    .myButton:hover {
-        background:linear-gradient(to bottom, #dfdfdf 5%, #ededed 100%);
-        background-color:#dfdfdf;
-    }
-    .myButton:active {
-        position:relative;
-        top:1px;
-    }
-</style>
+
 
 <body>
+    <script src="https://kit.fontawesome.com/225277b5de.js" crossorigin="anonymous"></script>
+    <script src='https://code.jquery.com/jquery-2.1.0.js'></script>
     <div class="container">
-        <a id="restart" class="myButton">RESTART</a><br>
-        <img id="regulaitons">
+        <img id="restart" src="https://raw.githubusercontent.com/DanielShpagin/Hangman/main/img/restart.png" width="100" height="100">
         <img id="myPicture" src="https://danielshpagin.github.io/Hangman/img/1.png">
         <canvas id="canvas" width="1000" height="200"></canvas>
-    </div>
-    
-    <script src='https://code.jquery.com/jquery-2.1.0.js'></script>
+        <a id="regulations" class="myButton">ПРАВИЛА</a>       
+        <a id="hangmanRegulation"> Спасите человечка от верной гибели! Угадайте слово на английском языке, иначе быть беде!</a>
+        <br><i id="close" class="fas fa-times"></i>
+        <h1 id="gameOver"></h1>
+        <h1 id="victory"></h1>
+    </div>    
 <script>
     var canvas = document.getElementById('canvas');
     var ctx = canvas.getContext("2d");
@@ -64,6 +26,18 @@
     var width = canvas.width;
     var height = canvas.height;
     var errors = 0;
+    
+    $('#regulations').click(function () {
+        $('#regulations').hide();
+        $('#hangmanRegulation').show();
+        $('#close').show();
+    });
+
+    $('#close').click(function () {
+        $('#regulations').show();
+        $('#hangmanRegulation').hide();
+        $('#close').hide();
+    });
 
     function drawHangman () {
         if (errors !== 7) {
@@ -74,16 +48,15 @@
             }
         }
         if (errors === 7) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            $('#regulations').hide();
             $('#myPicture').hide();
-            ctx.clearRect(0, 0, width, height);
-            ctx.font = "15px Comic Sans MS";
-            ctx.fillStyle = "Black";
-            ctx.textAlign = "left";
-            ctx.textBaseline = "top";
-            ctx.fillText("GAME OVER", 20, 60);
-            ctx.font = "50px Comic Sans Ms";
+            $('#gameOver').text(`Вы проиграли! Загаданое слово было: ${word}`);
             $('#restart').show().click(function (event) {
+                
+                $('#gameOver').text("");
                 initeAll();
+                console.log(word);
             });
         }
     };
@@ -111,16 +84,14 @@
         canvas.width = word.length*60;
     };
 
-    function initeAll() {
-        $("#restart").hide();
+    function initeAll() { 
         word = pickWord();
-        ctx.clearRect(0, 0, canvas.width, canvas.height);        
         errors = 0;
-        
         res = [];
         drawAnswerArray(word);
         $('#myPicture').show().attr('src','https://danielshpagin.github.io/Hangman/img/1.png');
-        console.log(word);
+        $('#restart').hide();
+        $('#regulations').show();
     };
 
     
@@ -137,32 +108,29 @@
         }
     };
     
-    
     var word;
     var answerArray;
     var res = [];
 
-    initeAll();
+    initeAll(); 
 
     for (var u = 0; word.length > u; u++) {
         res.push('_');
     };
 
-    console.log(word)
-
     $('body').keydown(function (event) {
         if (errors !== 9) {
-            ctx.font = "50px Comic Sans MS";
-            ctx.fillStyle = "Black";
-            ctx.textAlign = "left";
-            ctx.textBaseline = "top";
             var someThing = false;
             if (event.keyCode >= 65 && event.keyCode <= 90) {
                 for (var f = 0; word.length > f; f++) {
-                    if (word[f] === event.key) {
-                        ctx.fillText(`${event.key.toUpperCase()}`, f*60, 130);
+                    if (word[f] === event.key.toLowerCase()) {
+                        ctx.font = "60px Comic Sans MS";
+                        ctx.fillStyle = "Black";
+                        ctx.textAlign = "left"; 
+                        ctx.textBaseline = "top";
+                        ctx.fillText(`${event.key.toUpperCase()}`, f*60, 120);
                         someThing = true;
-                        res[f] = `${event.key}`;
+                        res[f] = `${event.key}`.toLowerCase();
                     }
                 }
             }
@@ -172,15 +140,13 @@
                     drawHangman();
                 }
             }
-            if (res.join('') === word) {
-                ctx.clearRect(0, 0, width, height);
-                ctx.font = "15px Comic Sans MS";
-                ctx.fillStyle = "Black";
-                ctx.textAlign = "left";
-                ctx.textBaseline = "top";
-                ctx.fillText(`YOU WIN! THE WORD WAS: ${word.toUpperCase()}`, 20, 60);
-                ctx.font = "15px Comic Sans Ms";
-                $('#restart').show().click(function (event) {
+            if (res.join('') === word) {     
+                $('#regulations').hide();
+                ctx.clearRect(0, 0, canvas.width, canvas.height);  
+                $('#victory').text(`Вы выиграли! Загаданое слово было: ${word}`);
+                $('#myPicture').attr('src', 'https://raw.githubusercontent.com/DanielShpagin/Hangman/main/img/victory.png');
+                $('#restart').show().click(function () {
+                    $('#victory').text("");
                     initeAll();
                 });
             }
@@ -188,5 +154,68 @@
     });
     
 </script>
+
+<style>
+    .container{
+        max-width: 700px;
+        margin: auto;
+        align-items: center;
+        text-align: center;
+    }
+    #restart{
+        display: none; 
+        transform: rotate(0deg);
+        transition-duration: 1000ms;
+    }
+    #restart:hover{
+        transform: rotate(360deg) scale(1.3);
+        transition-duration: 1000ms;
+    }
+    #canvas{
+        padding: 0;
+        margin: auto;
+        display: block;
+    }
+    .myButton{
+        box-shadow:inset 0px 1px 0px 0px #ffffff;
+        background:linear-gradient(to bottom, #ededed 5%, #dfdfdf 100%);
+        background-color:#ededed;
+        border-radius:6px;
+        border:1px solid #dcdcdc;
+        display:inline-block;
+        cursor:pointer;
+        color:#777777;
+        font-family:Arial;
+        font-size:15px;
+        font-weight:bold;
+        padding:6px 24px;
+        text-decoration:none;
+        text-shadow:0px 1px 0px #ffffff;
+    }
+    .myButton:hover{
+        background:linear-gradient(to bottom, #dfdfdf 5%, #ededed 100%);
+        background-color:#dfdfdf;
+    }
+    .myButton:active{
+        position:relative;
+        top:1px;
+    }
+
+    #close{
+        display: none; 
+        font-size: 30px;
+    }
+    #hangmanRegulation{
+        font-family: "Comic Sans MS", Courier;
+        display: none;
+        font-size: 20px;
+    }
+    #victory{
+        font-family: "Comic Sans MS", Courier;
+    }
+    #gameOver{
+        font-family: "Comic Sans MS", Courier;
+    }
+</style> 
 </body>
 </html>
