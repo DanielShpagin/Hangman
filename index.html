@@ -19,10 +19,8 @@
         <a id="hangmanRegulation"> Спасите человечка от верной гибели! Угадайте слово на английском языке, иначе быть беде!</a>
         <br><i id="close1" class="fas fa-times"></i>
         <br><i id="close2" class="fas fa-times"></i>
-        <h1 id="gameOver1"></h1>
-        <h1 id="gameOver2"></h1>
-        <h1 id="victory1"></h1>
-        <h1 id="victory2"></h1>
+        <h1 id="gameOver"></h1>
+        <h1 id="victory"></h1>
         <img id="prompt2" src="">
     </div>
     
@@ -78,6 +76,7 @@
             }
         }
         if (errors === 7) {
+            $('#close2').hide();
             for (var f = 0; alphabet.length > f; f++) {
                 $(`#${alphabet[f]}`).remove();
             }
@@ -85,14 +84,12 @@
             $('#regulations').hide();
             $('#myPicture').hide();
             $('#prompt1').hide();
-            $('#gameOver1').text(`Вы проиграли! Загаданое слово было: ${word}`);
+            $('#gameOver').text(`Вы проиграли! Загаданое слово было: ${word}, перевод: ${w[word].ru}`);
             $('#prompt2').show();
-            $('#gameOver2').text(`Перевод: ${w[word].ru}`);
             $('#restart').show().click(function (event) {
                 $('#prompt1').show();
                 $('#prompt2').hide();
-                $('#gameOver1').text("");
-                $('#gameOver2').text("");
+                $('#gameOver').text("");
                 initeAll();
                 console.log(word);
             });
@@ -108,8 +105,6 @@
         for (var u = 0; alphabet.length > u; u++) {
             $(`#${alphabet[u]}`).remove();
         }
-        $('#victory2').hide();
-        $('#gameOver2').hide();
         for (var p = 0; alphabet.length > p; p++) {
             $(`<a id=${alphabet[p]} href="#" class="myButton1">${alphabet[p]}</a>`).appendTo('body').click({key: alphabet[p]}, function (event) {
                 var key = event.data.key;
@@ -138,19 +133,17 @@
                             $(`#${alphabet[f]}`).remove();
                         }
                         $('#regulations').hide();
+                        $('#close2').hide();
                         ctx.clearRect(0, 0, canvas.width, canvas.height);
                         $('#prompt1').hide();
-                        $('#victory1').text(`Вы выиграли! Загаданое слово было: ${word}`);
+                        $('#victory').text(`Вы выиграли! Загаданое слово было: ${word}, перевод: ${w[word].ru}`);
                         $('#prompt2').show();
-                        $('#victory2').text(`Перевод: ${w[word].ru}`);
                         $('#myPicture').attr('src', 'https://raw.githubusercontent.com/DanielShpagin/Hangman/main/img/victory.png');
                         $('#restart').show().click(function () {
-                            
                             for (var v = 0; alphabet.length > v; v++) {
                                 $(`<a id=${alphabet[v]} href="#" class="myButton1">${alphabet[v]}</a>`).appendTo('body')
                             }
-                            $('#victory1').text("");
-                            $('#vicory2').text("");
+                            $('#victory').text("");
                             $('#prompt1').show();
                             $('#prompt2').hide();
                             initeAll();
