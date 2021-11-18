@@ -72,15 +72,13 @@
                 $(`#${alphabet[f]}`).remove();
             }
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            $('#picture').attr('src', `https://kreekly.com/img/words/${w[word].im}`);
+            $('#picture').show().attr('src', `https://kreekly.com/img/words/${w[word].im}`);
             $('#regulations').hide();
-            $('#myPicture').hide();
             $('#prompt').hide();
-            $('#gameOver').text(`Вы проиграли! Загаданое слово было: ${word}, перевод: ${w[word].ru}`);
+            $('#myPicture').hide();
+            $('#canvas').hide();
+            $('#gameOver').show().text(`Вы проиграли! Загаданое слово было: ${word}, перевод: ${w[word].ru}`);
             $('#restart').show().click(function (event) {
-                $('#picture').hide();
-                $('#prompt').show();
-                $('#gameOver').text("");
                 initeAll();
             });
         }
@@ -92,9 +90,17 @@
     };
 
     function initeAll() {
+        $('#picture').hide();
+        $('#victory').text("");
+        $('#prompt').show();
+        $('#gameOver').text("");
+        $('#canvas').show();
+        $('#gameOver').hide();
+        $('#victory').hide();
         for (var u = 0; alphabet.length > u; u++) {
             $(`#${alphabet[u]}`).remove();
         }
+        
         $('#hangmanRegulation').hide();
         for (var p = 0; alphabet.length > p; p++) {
             $(`<a id=${alphabet[p]} href="#" class="myButton1">${alphabet[p]}</a>`).appendTo('body').click({key: alphabet[p]}, function (event) {
@@ -117,29 +123,23 @@
                     if (someThing === false) {
                         errors++;
                         drawHangman();
-                        $('#prompt').show();
                         $(`#${key}`).css('color', 'red');
                     } else {
                         $(`#${key}`).css('color', 'OliveDrab');
                     }
-                    if (res.join('') === word) {  
+                    if (res.join('') === word) {                          
                         for (var f = 0; alphabet.length > f; f++) {
                             $(`#${alphabet[f]}`).remove();
                         }
                         $('#close').hide();
                         $('#regulations').hide();
-                        ctx.clearRect(0, 0, canvas.width, canvas.height);
-                        $('#prompt').hide();
-                        $('#victory').text(`Вы выиграли! Загаданое слово было: ${word}, перевод: ${w[word].ru}`);
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);                        
+                        $('#victory').show().text(`Вы выиграли! Загаданое слово было: ${word}, перевод: ${w[word].ru}`);
                         $('#picture').attr('src', `https://kreekly.com/img/words/${w[word].im}`);
                         $('#myPicture').attr('src', 'https://raw.githubusercontent.com/DanielShpagin/Hangman/main/img/victory.png');
-                        $('#restart').show().click(function () {
-                            for (var v = 0; alphabet.length > v; v++) {
-                                $(`<a id=${alphabet[v]} href="#" class="myButton1">${alphabet[v]}</a>`).appendTo('body')
-                            }
-                            $('#picture').hide();
-                            $('#victory').text("");
-                            $('#prompt').show();
+                        $('#canvas').hide();
+                        $('#prompt').hide();
+                        $('#restart').show().click(function () {                           
                             initeAll();
                         })
                     }
