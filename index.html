@@ -109,7 +109,7 @@
                             ctx.fillStyle = "Black";
                             ctx.textAlign = "left"; 
                             ctx.textBaseline = "top";
-                            ctx.fillText(`${key.toUpperCase()}`, f*60, 120);
+                            ctx.fillText(`${key.toUpperCase()}`, f*60, 90);
                             someThing = true;
                             res[f] = key.toLowerCase();
                         }
@@ -162,8 +162,8 @@
         ctx.strokeStyle = "Black";
         for (var i = 0; i < word.length; i++) {
             ctx.beginPath();
-            ctx.moveTo(i*60, 170);
-            ctx.lineTo(i*60 + 50, 170);
+            ctx.moveTo(i*60, 150);
+            ctx.lineTo(i*60 + 50, 150);
             ctx.stroke();
         }
     };
