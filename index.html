@@ -43,7 +43,6 @@
     ];
 
     $('#prompt').click(function () {
-        $('#prompt').hide();
         $('#myPicture').attr('src', `https://kreekly.com/img/words/${w[word].im}`);
     });
     
@@ -61,11 +60,7 @@
 
     function drawHangman () {
         if (errors !== 7) {
-            for (var q = 1; 8 > q; q++) {
-                if (errors === q) {
-                    $('#myPicture').show().attr('src','https://danielshpagin.github.io/Hangman/img/'+ (q+1) +'.png');
-                }
-            }
+            $('#myPicture').show().attr('src','https://danielshpagin.github.io/Hangman/img/'+ (errors+1) +'.png');            
         }
         if (errors === 7) {
             for (var f = 0; alphabet.length > f; f++) {
@@ -120,10 +115,10 @@
                             res[f] = key.toLowerCase();
                         }
                     }
-                    if (someThing === false) {
+                    if (!someThing) {
                         errors++;
                         drawHangman();
-                        $(`#${key}`).css('color', 'red');
+                        $(`#${key}`).css('color', 'red');                        
                     } else {
                         $(`#${key}`).css('color', 'OliveDrab');
                     }

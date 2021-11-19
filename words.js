@@ -1,3 +1,4 @@
+
 const w = {
     "cachalot": {
         "ru": "кашалот",
@@ -567,10 +568,6 @@ const w = {
         "ru": "смелый",
         "im": "courageous-1596203555.jpg"
     },
-    "rhombus": {
-        "ru": "ромб",
-        "im": "rhombus-1588957572.jpg"
-    },
     "garden": {
         "ru": "сад",
         "im": "garden.jpg"
@@ -822,10 +819,6 @@ const w = {
     "fingernail": {
         "ru": "ноготь",
         "im": "fingernail-368356.jpg"
-    },
-    "country-western": {
-        "ru": "кантри-вестерн",
-        "im": "country-western-1591735584.jpg"
     },
     "laconic": {
         "ru": "лаконичный",
